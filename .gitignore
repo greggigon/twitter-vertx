@@ -1,0 +1,5 @@
+mods/
+target/
+.lein*
+.repl*
+.DS_Store
