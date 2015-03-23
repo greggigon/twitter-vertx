@@ -7,7 +7,8 @@
                  [io.vertx/vertx-core "2.1.5"]
                  [io.vertx/vertx-platform "2.1.5"]
                  [io.vertx/clojure-api "1.0.4"]
-                 [lein-light-nrepl "0.1.0"]]
+                 [lein-light-nrepl "0.1.0"]
+                 [org.clojure/data.json "0.2.6"]]
 
   :plugins [[lein-vertx "0.3.1"]]
   :vertx {:main twitter.core/init

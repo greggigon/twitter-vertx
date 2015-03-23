@@ -41,22 +41,23 @@
 (defn contains-value? [coll value] (some #(= % value) coll))
 
 (defn update-wall
-  [user message]
+  [user message-id]
   (let [followers (keys (filter #(contains-value? (val %) user) @subscriptions))]
     (loop [walls-to-update followers]
       (if (not (empty? walls-to-update))
         (let [user-wall (first walls-to-update)
               messages (get @user-walls user-wall)]
-          (dosync (alter user-walls assoc (first walls-to-update) (cons message messages))))
+          (dosync (alter user-walls assoc (first walls-to-update) (cons message-id messages))))
         (recur (rest walls-to-update))))))
 
 (defn save-handler
   [message]
   (do
     (println (str "Received persist new message " message))
-    (->>
-      (save-message-for-user (:user message) (:message message))
-      (eb/reply))))
+    (let [message-id (save-message-for-user (:user message) (:message message))]
+      (do
+        (eb/reply message-id)
+        (eb/publish "twitter.persistence.update_walls" {:user (:user message) :message message-id})))))
 
 (defn read-handler
   [user]
@@ -78,7 +79,8 @@
 (defn read-wall-handler
   [user]
   (->> (get @user-walls user)
-       (map #(get @all-messages %))))
+       (map #(get @all-messages %))
+       (eb/reply)))
 
 
 (eb/on-message "twitter.persistence.new_message" save-handler)
