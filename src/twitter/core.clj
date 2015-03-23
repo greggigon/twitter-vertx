@@ -58,4 +58,8 @@
       (init-http-server)
       (println "Started ..."))))
 
-(init)
+(defn -main
+  [& args]
+  (init)
+  (println "Hitting ENTER will stop the server ...")
+  (line-seq (java.io.BufferedReader. *in*)))
