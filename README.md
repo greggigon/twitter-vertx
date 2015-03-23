@@ -24,6 +24,7 @@ For the rest of the README, when I refer to lein use version appropriate for you
 Endpoints:
 
 **GET  /message/:user** - where user is the name of the user to get the messages for. Returns a list of Messages as JSON.
+
 **POST /message/:user/:message** - posts new message for user. Returns a new message ID as a response.
 
 **POST /follow/:who/:whom** - create new follow subscription for user :user to follow user :whom.
